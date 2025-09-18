@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>To-do-list</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <header class="header">
+    <h1 class="app-title">To-do-list</h1>
+    <div class="header-controls">
+      <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">
+        <span class="theme-icon">&#9790;</span>
+      </button>
+      <button id="settings-btn" class="settings-btn" aria-label="Settings">
+        &#9881;
+      </button>
+    </div>
+  </header>
+
+  <!-- Quick Add -->
+  <div class="quick-add-section">
+    <button id="add-todo-btn" class="add-todo-btn" aria-label="Add new todo">
+      <span class="add-icon">&#43;</span>
+      <span class="add-text">Add New Todo</span>
+    </button>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="bulk-actions hidden" role="group" aria-label="Bulk actions">
+      <label class="checkbox-wrapper">
+        <input type="checkbox" id="select-all" />
+        <span class="checkmark" aria-hidden="true"></span>
+        <span class="label-text">Select All</span>
+      </label>
+
+      <button id="delete-selected" class="delete-btn" disabled>Delete Selected</button>
+      <button id="complete-selected" class="complete-btn" disabled>Complete Selected</button>
+      <button id="deselect-all" class="settings-btn" disabled>Deselect All</button>
+      <button id="clear-completed" class="delete-btn" disabled>Clear Completed</button>
+      <button id="export-selected" class="settings-btn" disabled>Export Selected</button>
+    </div>
+
+    <div class="filter-controls" role="tablist" aria-label="Filter todos">
+      <button class="filter-btn active" data-filter="all" role="tab">All</button>
+      <button class="filter-btn" data-filter="active" role="tab">Active</button>
+      <button class="filter-btn" data-filter="completed" role="tab">Completed</button>
+    </div>
+  </div>
+
+  <!-- Todo List -->
+  <ul id="todo-list" class="todo-list" aria-live="polite"></ul>
+
+  <!-- Stats -->
+  <div class="stats">
+    <span id="todo-count">0 todos</span>
+    <span id="completed-count">0 completed</span>
+  </div>
+
+  <!-- Settings Panel -->
+  <div id="settings-panel" class="settings-panel" style="display: none;">
+    <div class="settings-content" role="dialog" aria-modal="true" aria-label="Settings">
+      <h3>Settings</h3>
+
+      <div class="setting-item">
+        <label for="theme-setting">Theme:</label>
+        <select id="theme-setting" aria-label="Theme setting">
+          <option value="auto">Auto</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="solar">Solar</option>
+          <option value="pastel">Pastel</option>
+          <option value="high-contrast">High Contrast</option>
+        </select>
+      </div>
+
+      <div class="settings-actions">
+        <button id="close-settings" class="close-btn">Close</button>
+        <button id="clear-all-data" class="danger-btn">Clear All Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Todo Modal -->
+  <div id="add-todo-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-container" role="dialog" aria-modal="true" aria-label="Add new todo">
+      <div class="modal-header">
+        <h2>Add New Todo</h2>
+        <button id="close-add-modal" class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="add-todo-modal-form" class="modal-form">
+        <div class="form-field">
+          <label for="modal-todo-title">Title *</label>
+          <input type="text" id="modal-todo-title" placeholder="Enter todo title..." required />
+        </div>
+
+        <div class="form-field">
+          <label for="modal-priority-select">Priority</label>
+          <select id="modal-priority-select" class="modal-priority-select">
+            <option value="low">Low Priority</option>
+            <option value="medium" selected>Medium Priority</option>
+            <option value="high">High Priority</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="modal-description">Description</label>
+          <textarea id="modal-description" placeholder="Add description..." rows="3"></textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="modal-notes">Notes</label>
+          <textarea id="modal-notes" placeholder="Add notes..." rows="3"></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancel-add-modal" class="modal-cancel">Cancel</button>
+          <button type="submit" class="modal-submit">Add Todo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Todo Modal -->
+  <div id="edit-todo-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-container" role="dialog" aria-modal="true" aria-label="Edit todo">
+      <div class="modal-header">
+        <h2>Edit Todo</h2>
+        <button id="close-edit-modal" class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="edit-todo-modal-form" class="modal-form">
+        <div class="form-field">
+          <label for="edit-todo-title">Title *</label>
+          <input type="text" id="edit-todo-title" placeholder="Enter todo title..." required />
+        </div>
+
+        <div class="form-field">
+          <label for="edit-priority-select">Priority</label>
+          <select id="edit-priority-select" class="modal-priority-select">
+            <option value="low">Low Priority</option>
+            <option value="medium">Medium Priority</option>
+            <option value="high">High Priority</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="edit-description">Description</label>
+          <textarea id="edit-description" placeholder="Add description..." rows="3"></textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="edit-notes">Notes</label>
+          <textarea id="edit-notes" placeholder="Add notes..." rows="3"></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancel-edit-modal" class="modal-cancel">Cancel</button>
+          <button type="submit" class="modal-submit">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Todo Item Template -->
+  <template id="todo-template">
+    <li class="todo-item" data-priority="">
+      <div class="todo-main">
+        <label class="checkbox-wrapper select-wrapper">
+          <input type="checkbox" class="todo-select" />
+          <span class="checkmark" aria-hidden="true"></span>
+        </label>
+
+        <div class="todo-content">
+          <div class="todo-text"></div>
+          <div class="todo-meta">
+            <span class="priority-badge"></span>
+            <span class="todo-timestamp"></span>
+          </div>
+        </div>
+
+        <div class="todo-actions">
+          <button class="complete-toggle" aria-label="Toggle complete">&#10003;</button>
+          <button class="edit-btn" aria-label="Edit">&#9998;</button>
+          <button class="duplicate-btn" aria-label="Duplicate">&#128209;</button>
+          <button class="delete-btn" aria-label="Delete">&#128465;</button>
+          <button class="expand-btn" aria-label="Show details">&#9660;</button>
+        </div>
+      </div>
+
+      <div class="todo-details" style="display: none;">
+        <div class="todo-description"></div>
+        <div class="todo-notes"></div>
+      </div>
+    </li>
+  </template>
+
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
